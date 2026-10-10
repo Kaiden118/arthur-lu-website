@@ -104,24 +104,26 @@ export default function Page() {
       <a className="skip-link" href="#main">Skip to content</a>
       <header className="site-header">
         <a className="brand-mark" href="#top" aria-label="Arthur Lu home">AL<span>.</span></a>
-        <nav id="site-navigation" className={`site-nav${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation">
+        <div className="header-actions">
+          <a className="resume-link" href="/cv.pdf" target="_blank" rel="noreferrer">Resume</a>
+          <button
+            className="menu-toggle"
+            type="button"
+            aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={menuOpen}
+            aria-controls="site-navigation"
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+          </button>
+        </div>
+        <nav id="site-navigation" className={`site-nav${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation" aria-hidden={!menuOpen}>
           {navigation.map((item) => (
-            <a key={item.href} href={item.href} onClick={closeMenu}>
+            <a key={item.href} href={item.href} onClick={closeMenu} tabIndex={menuOpen ? 0 : -1}>
               <span>{item.number}</span> {item.label}
             </a>
           ))}
         </nav>
-        <a className="resume-link" href="/cv.pdf" target="_blank" rel="noreferrer">Resume</a>
-        <button
-          className="menu-toggle"
-          type="button"
-          aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-          aria-expanded={menuOpen}
-          aria-controls="site-navigation"
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
-        </button>
       </header>
 
       <main id="main" className="portfolio-shell">
@@ -134,7 +136,7 @@ export default function Page() {
           <div className="hero-contact" aria-label="Contact and profiles">
             <a href="mailto:zechuanl@usc.edu"><Mail aria-hidden="true" /> zechuanl@usc.edu</a>
             <a href="https://github.com/Kaiden118" target="_blank" rel="noreferrer"><CodeXml aria-hidden="true" /> GitHub</a>
-            <a href="https://linkedin.com/in/zechuan-lu-6923a1371" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a href="https://linkedin.com/in/zechuan-lu-6923a1371" target="_blank" rel="noreferrer"><span className="linkedin-icon" aria-hidden="true">in</span> LinkedIn</a>
           </div>
         </section>
 
