@@ -31,7 +31,7 @@ const projects = [
   },
   {
     title: 'MotionCaptureSystem',
-    date: 'Jul 2025',
+    date: 'Oct 2024 – Apr 2025',
     description: 'Multi-camera 6-DoF object tracking with calibrated camera geometry and real-time pose estimation.',
     tags: ['multi-camera', '6-DoF', 'pose estimation'],
   },
