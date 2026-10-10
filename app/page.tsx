@@ -85,7 +85,7 @@ export default function Page() {
       <header className="site-header">
         <a className="brand-mark" href="#top" aria-label="Arthur Lu home">AL<span>.</span></a>
         <div className="header-actions">
-          <a className="resume-link" href="/cv.pdf" target="_blank" rel="noreferrer">Resume</a>
+          <a className="resume-link" href="/resume.pdf" target="_blank" rel="noreferrer">Resume</a>
           <button
             className="menu-toggle"
             type="button"
