@@ -18,21 +18,21 @@ const navigation = [
 const projects = [
   {
     title: 'RunSleuth',
-    repository: 'https://github.com/kaiden118/runsleuth-evidence-grounded-ml-training-failure-diagnosis-and-repair-verification',
+    repositoryUrl: 'https://github.com/kaiden118/runsleuth-evidence-grounded-ml-training-failure-diagnosis-and-repair-verification',
     date: 'Sep 2026 – Present',
     description: 'Evidence-grounded ML failure diagnosis & repair verification — a tool-calling LLM agent that diagnoses PyTorch training failures including silent faults and verifies proposed repairs against evidence.',
     tags: ['PyTorch', 'LLM agent', 'training failures'],
   },
   {
     title: 'CMCD',
-    repository: cmcdRepository,
+    repositoryUrl: cmcdRepository,
     date: 'Jun 2025 – May 2026',
     description: 'Conditional diffusion model for T1/T2 MRI modality translation (ICONIP 2026).',
     tags: ['diffusion models', 'MRI', 'medical imaging'],
   },
   {
     title: 'MotionCaptureSystem',
-    repository: 'https://github.com/kaiden118/motioncapturesystem',
+    repositoryUrl: 'https://github.com/kaiden118/motioncapturesystem',
     date: 'Oct 2024 – Apr 2025',
     description: 'Multi-camera 6-DoF object tracking with calibrated camera geometry and real-time pose estimation.',
     tags: ['multi-camera', '6-DoF', 'pose estimation'],
@@ -184,12 +184,12 @@ export default function Page() {
               <article className="project-card" key={project.title}>
                 <div className="project-card-top">
                   <FolderGit2 aria-hidden="true" />
-                  <a className="project-link" href={project.repository} target="_blank" rel="noreferrer" aria-label={`View ${project.title} on GitHub`}>
+                  <a className="project-link" href={project.repositoryUrl} target="_blank" rel="noreferrer" aria-label={`View ${project.title} on GitHub`}>
                     <CodeXml aria-hidden="true" />
                     <ArrowUpRight aria-hidden="true" />
                   </a>
                 </div>
-                <h3><a href={project.repository} target="_blank" rel="noreferrer">{project.title}</a></h3>
+                <h3><a href={project.repositoryUrl} target="_blank" rel="noreferrer">{project.title}</a></h3>
                 <p className="project-date">{project.date}</p>
                 <p className="project-description">{project.description}</p>
                 <ul className="tag-list" aria-label={`${project.title} technologies`}>
