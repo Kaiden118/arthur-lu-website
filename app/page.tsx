@@ -25,13 +25,13 @@ const projects = [
   },
   {
     title: 'CMCD',
-    date: 'Mar 2026 – Present',
-    description: 'Conditional diffusion model for T1/T2 MRI modality translation (first-author research, ICONIP 2026).',
+    date: 'Jun 2025 – May 2026',
+    description: 'Conditional diffusion model for T1/T2 MRI modality translation (ICONIP 2026).',
     tags: ['diffusion models', 'MRI', 'medical imaging'],
   },
   {
     title: 'MotionCaptureSystem',
-    date: 'Jul 2025',
+    date: 'Oct 2024 – Apr 2025',
     description: 'Multi-camera 6-DoF object tracking with calibrated camera geometry and real-time pose estimation.',
     tags: ['multi-camera', '6-DoF', 'pose estimation'],
   },
