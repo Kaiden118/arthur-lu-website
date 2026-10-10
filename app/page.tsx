@@ -25,8 +25,8 @@ const projects = [
   },
   {
     title: 'CMCD',
-    date: 'Mar 2026 – Present',
-    description: 'Conditional diffusion model for T1/T2 MRI modality translation (first-author research, ICONIP 2026).',
+    date: 'Jun 2025 – May 2026',
+    description: 'Conditional diffusion model for T1/T2 MRI modality translation (ICONIP 2026).',
     tags: ['diffusion models', 'MRI', 'medical imaging'],
   },
   {
