@@ -17,16 +17,19 @@ const navigation = [
 const projects = [
   {
     title: 'RunSleuth',
+    date: 'Sep 2026 – Present',
     description: 'Evidence-grounded ML failure diagnosis & repair verification — a tool-calling LLM agent that diagnoses PyTorch training failures including silent faults and verifies proposed repairs against evidence.',
     tags: ['PyTorch', 'LLM agent', 'training failures'],
   },
   {
     title: 'CMCD',
+    date: '2026',
     description: 'Conditional diffusion model for T1/T2 MRI modality translation (first-author research, ICONIP 2026).',
     tags: ['diffusion models', 'MRI', 'medical imaging'],
   },
   {
     title: 'MotionCaptureSystem',
+    date: '2025',
     description: 'Multi-camera 6-DoF object tracking with calibrated camera geometry and real-time pose estimation.',
     tags: ['multi-camera', '6-DoF', 'pose estimation'],
   },
@@ -101,6 +104,14 @@ export default function Page() {
       <a className="skip-link" href="#main">Skip to content</a>
       <header className="site-header">
         <a className="brand-mark" href="#top" aria-label="Arthur Lu home">AL<span>.</span></a>
+        <nav id="site-navigation" className={`site-nav${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation">
+          {navigation.map((item) => (
+            <a key={item.href} href={item.href} onClick={closeMenu}>
+              <span>{item.number}</span> {item.label}
+            </a>
+          ))}
+        </nav>
+        <a className="resume-link" href="/cv.pdf" target="_blank" rel="noreferrer">Resume</a>
         <button
           className="menu-toggle"
           type="button"
@@ -111,14 +122,6 @@ export default function Page() {
         >
           {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
         </button>
-        <nav id="site-navigation" className={`site-nav${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation">
-          {navigation.map((item) => (
-            <a key={item.href} href={item.href} onClick={closeMenu}>
-              <span>{item.number}</span> {item.label}
-            </a>
-          ))}
-          <a className="resume-link" href="/cv.pdf" target="_blank" rel="noreferrer" onClick={closeMenu}>Resume</a>
-        </nav>
       </header>
 
       <main id="main" className="portfolio-shell">
@@ -157,11 +160,17 @@ export default function Page() {
         <section id="publications" className="portfolio-section" data-reveal aria-labelledby="publications-heading">
           <SectionHeading number="02.">Publications</SectionHeading>
           <ol className="publication-list">
-            <li>
-              <p><span className="publication-title">CMCD: Conditional Diffusion Model for Medical Image Modality Translation.</span> Lu, Z., et al. International Conference on Neural Information Processing (ICONIP), 2026. <strong>First author.</strong> 0.90 SSIM / 27.5 dB PSNR on BraTS 2019/2020.</p>
+            <li className="publication-item">
+              <h3 className="publication-title">CMCD: Conditional Diffusion Model for Medical Image Modality Translation.</h3>
+              <p className="publication-authors"><span className="author-highlight">Lu, Z.</span>, et al. <strong>First author.</strong></p>
+              <p className="publication-venue"><em>International Conference on Neural Information Processing (ICONIP)</em>, 2026.</p>
+              <a className="publication-code" href={githubProject} target="_blank" rel="noreferrer">[code]</a>
             </li>
-            <li>
-              <p><span className="publication-title">Interactions of Three Berberine Mid-Chain Fatty Acid Salts with Bovine Serum Albumin (BSA): Spectroscopic Analysis and Molecular Docking.</span> Fan, S., Lu, Z., Yan, Z., &amp; Hu, L. <em>International Journal of Biological Macromolecules</em>, 274, 133370, 2024. Second author.</p>
+            <li className="publication-item">
+              <h3 className="publication-title">Interactions of Three Berberine Mid-Chain Fatty Acid Salts with Bovine Serum Albumin (BSA): Spectroscopic Analysis and Molecular Docking.</h3>
+              <p className="publication-authors">Fan, S., <span className="author-highlight">Lu, Z.</span>, Yan, Z., &amp; Hu, L. Second author.</p>
+              <p className="publication-venue"><em>International Journal of Biological Macromolecules</em>, 274, 133370, 2024.</p>
+              <a className="publication-code" href={githubProject} target="_blank" rel="noreferrer">[code]</a>
             </li>
           </ol>
         </section>
@@ -179,7 +188,7 @@ export default function Page() {
                   </a>
                 </div>
                 <h3><a href={githubProject} target="_blank" rel="noreferrer">{project.title}</a></h3>
-                {project.title === 'RunSleuth' && <p className="project-date">Sep 2026 – Present</p>}
+                <p className="project-date">{project.date}</p>
                 <p className="project-description">{project.description}</p>
                 <ul className="tag-list" aria-label={`${project.title} technologies`}>
                   {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
