@@ -55,8 +55,10 @@ const experience = [
   },
 ]
 
+const languages = ['Python', 'C++', 'JavaScript', 'Java', 'C#', 'SQL'] as const
+
 const skillGroups = [
-  { label: 'Languages', items: ['Python', 'C++', 'JavaScript', 'Java', 'C#', 'SQL'] },
+  { label: 'Languages', items: languages },
   { label: 'ML/GenAI', items: ['PyTorch', 'OpenCV', 'LLM agents', 'diffusion models', 'Transformers', 'Hugging Face', 'OpenAI API'] },
   { label: 'Frameworks', items: ['Flask', 'FastAPI', 'Vue.js', 'Socket.IO'] },
 ]
@@ -206,7 +208,7 @@ export default function Page() {
           <SectionHeading number="05.">Skills</SectionHeading>
           <div className="skills-grid">
             {skillGroups.map((group) => (
-              <div className="skill-group" key={group.label}>
+              <div className="skill-group" key={group.label} data-skill-group={group.label}>
                 <h3>{group.label}</h3>
                 <ul>{group.items.map((skill) => <li key={skill}>{skill}</li>)}</ul>
               </div>
