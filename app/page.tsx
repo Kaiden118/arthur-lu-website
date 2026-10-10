@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { ArrowUpRight, CodeXml, FolderGit2, Mail, Menu, X } from 'lucide-react'
 
 const githubProject = 'https://github.com/Kaiden118'
+const cmcdRepository = 'https://github.com/Kaiden118/Cross-Modality-Conditional-Diffusion-Model'
+const berberinePaper = 'https://doi.org/10.1016/j.ijbiomac.2024.133370'
 
 const navigation = [
   { number: '01.', label: 'About', href: '#about' },
@@ -23,13 +25,13 @@ const projects = [
   },
   {
     title: 'CMCD',
-    date: '2026',
+    date: 'Mar 2026 – Present',
     description: 'Conditional diffusion model for T1/T2 MRI modality translation (first-author research, ICONIP 2026).',
     tags: ['diffusion models', 'MRI', 'medical imaging'],
   },
   {
     title: 'MotionCaptureSystem',
-    date: '2025',
+    date: 'Jul 2025',
     description: 'Multi-camera 6-DoF object tracking with calibrated camera geometry and real-time pose estimation.',
     tags: ['multi-camera', '6-DoF', 'pose estimation'],
   },
@@ -163,16 +165,12 @@ export default function Page() {
           <SectionHeading number="02.">Publications</SectionHeading>
           <ol className="publication-list">
             <li className="publication-item">
-              <h3 className="publication-title">CMCD: Conditional Diffusion Model for Medical Image Modality Translation.</h3>
-              <p className="publication-authors"><span className="author-highlight">Lu, Z.</span>, et al. <strong>First author.</strong></p>
-              <p className="publication-venue"><em>International Conference on Neural Information Processing (ICONIP)</em>, 2026.</p>
-              <a className="publication-code" href={githubProject} target="_blank" rel="noreferrer">[code]</a>
+              <p className="publication-citation"><strong className="author-highlight">Lu, Z.</strong>, et al. <a className="publication-title" href={cmcdRepository} target="_blank" rel="noreferrer">CMCD: Conditional Diffusion Model for Medical Image Modality Translation.</a> <em>International Conference on Neural Information Processing (ICONIP)</em>, 2026.</p>
+              <a className="publication-code" href={cmcdRepository} target="_blank" rel="noreferrer">[code]</a>
             </li>
             <li className="publication-item">
-              <h3 className="publication-title">Interactions of Three Berberine Mid-Chain Fatty Acid Salts with Bovine Serum Albumin (BSA): Spectroscopic Analysis and Molecular Docking.</h3>
-              <p className="publication-authors">Fan, S., <span className="author-highlight">Lu, Z.</span>, Yan, Z., &amp; Hu, L. Second author.</p>
-              <p className="publication-venue"><em>International Journal of Biological Macromolecules</em>, 274, 133370, 2024.</p>
-              <a className="publication-code" href={githubProject} target="_blank" rel="noreferrer">[code]</a>
+              <p className="publication-citation">Fan, S., <strong className="author-highlight">Lu, Z.</strong>, Yan, Z., &amp; Hu, L. <a className="publication-title" href={berberinePaper} target="_blank" rel="noreferrer">Interactions of Three Berberine Mid-Chain Fatty Acid Salts with Bovine Serum Albumin (BSA): Spectroscopic Analysis and Molecular Docking.</a> <em>International Journal of Biological Macromolecules</em>, 274, 133370, 2024.</p>
+              <a className="publication-code" href={berberinePaper} target="_blank" rel="noreferrer">[paper]</a>
             </li>
           </ol>
         </section>

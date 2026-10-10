@@ -398,28 +398,29 @@ button:focus-visible {
   border-left: 2px solid var(--accent);
 }
 
-.publication-title {
-  margin: 0 0 0.35rem;
-  color: var(--foreground);
-  font-size: 1.05rem;
-  font-weight: 700;
-  line-height: 1.45;
-}
-
-.publication-authors,
-.publication-venue {
-  margin: 0.25rem 0 0;
+.publication-citation {
+  margin: 0;
   color: var(--muted-foreground);
   font-size: 0.9rem;
+  line-height: 1.65;
 }
 
-.publication-authors strong,
+.publication-title {
+  color: var(--foreground);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.publication-title:hover {
+  color: var(--accent);
+}
+
 .author-highlight {
   color: var(--foreground);
   font-weight: 700;
 }
 
-.publication-venue em {
+.publication-citation em {
   color: var(--muted-foreground);
 }
 
