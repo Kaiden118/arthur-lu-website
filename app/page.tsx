@@ -10,9 +10,8 @@ const navigation = [
   { number: '01.', label: 'About', href: '#about' },
   { number: '02.', label: 'Publications', href: '#publications' },
   { number: '03.', label: 'Projects', href: '#projects' },
-  { number: '04.', label: 'Experience', href: '#experience' },
-  { number: '05.', label: 'Skills', href: '#skills' },
-  { number: '06.', label: 'Contact', href: '#contact' },
+  { number: '04.', label: 'Skills', href: '#skills' },
+  { number: '05.', label: 'Contact', href: '#contact' },
 ]
 
 const projects = [
@@ -36,29 +35,6 @@ const projects = [
     date: 'Oct 2024 – Apr 2025',
     description: 'Multi-camera 6-DoF object tracking with calibrated camera geometry and real-time pose estimation.',
     tags: ['multi-camera', '6-DoF', 'pose estimation'],
-  },
-]
-
-const experience = [
-  {
-    date: 'Jun 2025 – Aug 2025',
-    role: 'Undergraduate Research Assistant, UNNC',
-    description: 'HoloLens 2 rehabilitation pose tracking with OpenPose and Unity; contributed to a conference manuscript.',
-  },
-  {
-    date: 'Jun 2024 – Aug 2024',
-    role: 'Undergraduate Research Intern, UNNC',
-    description: 'Built a Raspberry Pi/Arduino IoT intrusion-detection testbed.',
-  },
-  {
-    date: 'Jan 2024 – Feb 2024',
-    role: 'Software Development Intern, Shenzhen Topsky Software',
-    description: 'Developed a WeChat Mini Program for healthcare workflows; cut appointment time by 30%.',
-  },
-  {
-    date: 'Sep 2022 – Oct 2023',
-    role: 'Mechanical Group Member, UNNC Formula Student Electric Racing Team',
-    description: 'Contributed to chassis analysis, SOLIDWORKS, bill of materials, and fabrication.',
   },
 ]
 
@@ -109,7 +85,7 @@ export default function Page() {
       <header className="site-header">
         <a className="brand-mark" href="#top" aria-label="Arthur Lu home">AL<span>.</span></a>
         <div className="header-actions">
-          <a className="resume-link" href="/cv.pdf" target="_blank" rel="noreferrer">Resume</a>
+          <a className="resume-link" href="/resume.pdf" target="_blank" rel="noreferrer">Resume</a>
           <button
             className="menu-toggle"
             type="button"
@@ -200,23 +176,8 @@ export default function Page() {
           </div>
         </section>
 
-        <section id="experience" className="portfolio-section" data-reveal aria-labelledby="experience-heading">
-          <SectionHeading number="04.">Experience</SectionHeading>
-          <div className="experience-list">
-            {experience.map((item) => (
-              <article className="experience-row" key={item.role}>
-                <p className="experience-date">{item.date}</p>
-                <div>
-                  <h3>{item.role}</h3>
-                  <p>{item.description}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
         <section id="skills" className="portfolio-section" data-reveal aria-labelledby="skills-heading">
-          <SectionHeading number="05.">Skills</SectionHeading>
+          <SectionHeading number="04.">Skills</SectionHeading>
           <div className="skills-grid">
             {skillGroups.map((group) => (
               <div className="skill-group" key={group.label} data-skill-group={group.label}>
@@ -228,7 +189,7 @@ export default function Page() {
         </section>
 
         <section id="contact" className="contact-section" data-reveal aria-labelledby="contact-heading">
-          <p className="eyebrow">06. What&apos;s next?</p>
+          <p className="eyebrow">05. What&apos;s next?</p>
           <h2 id="contact-heading">Get In Touch</h2>
           <p>I am seeking a 2027 summer internship in ML/AI engineering or software development.</p>
           <a className="outline-button" href="mailto:zechuanl@usc.edu">Say Hello</a>
