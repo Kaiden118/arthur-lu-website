@@ -153,8 +153,8 @@ h3 {
 }
 
 .portrait {
-  width: 88px;
-  height: 88px;
+  width: 136px;
+  height: 136px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -307,7 +307,7 @@ h3 {
     opacity 240ms ease;
 }
 
-/* The title link covers the whole card; the other links and the results table sit above it. */
+/* The title link covers the whole card; the thumbnail and the other links sit above it. */
 .card-link::after {
   position: absolute;
   z-index: 0;
@@ -317,8 +317,7 @@ h3 {
 }
 
 .card .thumb,
-.card .links a,
-.card .results {
+.card .links a {
   position: relative;
   z-index: 1;
 }
@@ -442,77 +441,6 @@ h3 {
   color: var(--muted);
 }
 
-.results {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.results-scroll {
-  overflow-x: auto;
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-  background: var(--surface);
-}
-
-.results table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.8125rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.results th,
-.results td {
-  padding: 9px 12px;
-  border-bottom: 1px solid var(--rule);
-  text-align: right;
-}
-
-.results td {
-  white-space: nowrap;
-}
-
-.results th:first-child {
-  text-align: left;
-}
-
-.results thead th {
-  color: var(--faint);
-  font-family: var(--type-mono);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.results tbody th {
-  font-weight: 400;
-}
-
-.results td {
-  color: var(--muted);
-  font-family: var(--type-mono);
-}
-
-.results tbody tr:last-child > * {
-  border-bottom: 0;
-}
-
-.results .is-ours > * {
-  background: var(--accent-soft);
-  color: var(--accent-ink);
-  font-weight: 500;
-}
-
-.results-note {
-  max-width: 72ch;
-  margin: 0;
-  color: var(--faint);
-  font-size: 0.8125rem;
-  line-height: 1.5;
-}
-
 .facts {
   display: flex;
   flex-wrap: wrap;
@@ -520,6 +448,14 @@ h3 {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.facts-note {
+  max-width: 66ch;
+  margin: -6px 0 0;
+  color: var(--faint);
+  font-size: 0.8125rem;
+  line-height: 1.5;
 }
 
 .facts li {
@@ -739,18 +675,21 @@ h3 {
   }
 
   .toc a::before {
-    width: 16px;
+    width: 32px;
     height: 1px;
+    flex: none;
     background: currentColor;
     content: '';
     opacity: 0.5;
-    transition: width 220ms ease, opacity 220ms ease;
+    transform: scaleX(0.5);
+    transform-origin: left;
+    transition: transform 220ms ease, opacity 220ms ease;
   }
 
   .toc a:hover::before,
   .toc a[aria-current]::before {
-    width: 40px;
     opacity: 1;
+    transform: scaleX(1);
   }
 
   .main-col {
@@ -783,14 +722,14 @@ h3 {
   .project-subtitle {
     font-size: 0.9375rem;
   }
-
-  .results th,
-  .results td {
-    padding: 9px 10px;
-  }
 }
 
 @media (max-width: 560px) {
+  .portrait {
+    width: 112px;
+    height: 112px;
+  }
+
   .name {
     font-size: 1.875rem;
   }

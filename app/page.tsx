@@ -27,9 +27,6 @@ const sections = [
   { id: 'skills', label: 'Skills' },
 ]
 
-// The intro is observed too, so no section is marked while it is on screen.
-const observedSections = ['about', ...sections.map((section) => section.id)]
-
 type Link = { label: string; href: string }
 
 type Project = {
@@ -40,12 +37,9 @@ type Project = {
   period: string
   context: string
   summary: string
-  results?: {
-    columns: string[]
-    rows: { name: string; values: string[]; highlight?: boolean }[]
-    note: string
-  }
   facts?: string[]
+  // Context for the facts, shown under them.
+  factsNote?: string
   // A 3:2 thumbnail shown beside the project, linking to the full figure.
   image: { thumbnail: string; full: string; alt: string }
   tags: string[]
@@ -62,16 +56,9 @@ const projects: Project[] = [
     context: 'Independent research',
     summary:
       'Training bugs are often silent: the run finishes and accuracy barely moves. When an LLM agent says it fixed one, RunSleuth checks each requirement of the task against evidence recorded while the repaired project trains, runs short probes where that evidence is missing, and then accepts the repair, rejects it or sends it to a person.',
-    results: {
-      columns: ['Verifier', 'Wrong accepted', 'Correct rejected', 'Sent to review'],
-      rows: [
-        { name: 'Metric gate', values: ['12 / 16', '7 / 164', '0 / 180'] },
-        { name: 'Claude Sonnet 5.5 as reviewer', values: ['2 / 16', '0 / 164', '2 / 180'] },
-        { name: 'RunSleuth v2', values: ['0 / 16', '0 / 164', '44 / 180'], highlight: true },
-      ],
-      note:
-        'Held-out test split: 180 repairs written by five LLM agents for six faults in pathology (Camelyon17-WILDS) and dermoscopy (HAM10000) pipelines. Preliminary until the blind review of the labels is complete.',
-    },
+    facts: ['0 / 16 wrong repairs accepted', '0 / 164 correct repairs rejected', 'Best LLM reviewer: 2 / 16 wrong accepted'],
+    factsNote:
+      'Held-out test of 180 repairs written by five LLM agents for six faults in pathology and dermoscopy pipelines. Preliminary until the blind review of the labels is complete.',
     image: {
       thumbnail: '/work/runsleuth-thumb.svg',
       full: '/work/runsleuth-overview.svg',
@@ -201,38 +188,13 @@ function ProjectEntry({ project }: { project: Project }) {
       <div className="project-body">
         <p className="project-summary">{project.summary}</p>
 
-        {project.results && (
-          <div className="results">
-            <div className="results-scroll">
-              <table aria-describedby={`${project.id}-results-note`}>
-                <thead>
-                  <tr>
-                    {project.results.columns.map((column) => (
-                      <th key={column} scope="col">{column}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {project.results.rows.map((row) => (
-                    <tr key={row.name} className={row.highlight ? 'is-ours' : undefined}>
-                      <th scope="row">{row.name}</th>
-                      {row.values.map((value, index) => (
-                        <td key={project.results!.columns[index + 1]}>{value}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <p id={`${project.id}-results-note`} className="results-note">{project.results.note}</p>
-          </div>
-        )}
-
         {project.facts && (
           <ul className="facts" aria-label={`${project.title} results`}>
             {project.facts.map((fact) => <li key={fact}>{fact}</li>)}
           </ul>
         )}
+
+        {project.factsNote && <p className="facts-note">{project.factsNote}</p>}
 
         <footer className="project-foot">
           <ul className="tags" aria-label={`${project.title} technologies`}>
@@ -261,7 +223,7 @@ export default function Page() {
         <div className="profile-inner">
           <div className="profile-id">
             {photo ? (
-              <img className="portrait" src={photo} width={88} height={88} alt="Arthur Lu’s avatar" />
+              <img className="portrait" src={photo} width={136} height={136} alt="Arthur Lu’s avatar" />
             ) : (
               <div className="monogram" aria-hidden="true">AL</div>
             )}
@@ -294,7 +256,7 @@ export default function Page() {
               ))}
             </dl>
 
-            <SectionNav sections={sections} observe={observedSections} />
+            <SectionNav sections={sections} />
           </div>
         </div>
       </aside>
