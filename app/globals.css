@@ -18,6 +18,8 @@
   --signal: #1f7a4d;
   --plate: #ffffff;
   --plate-filter: none;
+  --ring: color-mix(in srgb, var(--accent) 30%, var(--rule));
+  --lift-shadow: 0 1px 2px rgb(21 23 28 / 0.05), 0 18px 36px -18px rgb(61 58 140 / 0.35);
 
   --type-sans: var(--font-plex-sans), 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --type-mono: var(--font-plex-mono), 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -39,6 +41,7 @@
     --signal: #4cc38a;
     --plate: #ffffff;
     --plate-filter: brightness(0.9);
+    --lift-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04), 0 18px 40px -18px rgb(0 0 0 / 0.8);
     color-scheme: dark;
   }
 }
@@ -56,6 +59,7 @@
   --signal: #4cc38a;
   --plate: #ffffff;
   --plate-filter: brightness(0.9);
+  --lift-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04), 0 18px 40px -18px rgb(0 0 0 / 0.8);
   color-scheme: dark;
 }
 
@@ -246,8 +250,9 @@ h3 {
   text-decoration: none;
 }
 
-.toc a:hover {
-  color: var(--accent);
+.toc a:hover,
+.toc a[aria-current] {
+  color: var(--ink);
 }
 
 /* Main column */
@@ -280,7 +285,72 @@ h3 {
 .projects {
   display: flex;
   flex-direction: column;
-  gap: 64px;
+  gap: 24px;
+}
+
+/* Cards: at rest they read as plain text; on hover they lift and show their outline.
+   The padding is cancelled by a negative margin so the text stays on the column edge. */
+
+.card {
+  --card-pad: 20px;
+
+  position: relative;
+  margin-inline: calc(-1 * var(--card-pad));
+  padding: var(--card-pad);
+  border: 1px solid transparent;
+  border-radius: 14px;
+  transition:
+    transform 240ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 240ms ease,
+    border-color 240ms ease,
+    background-color 240ms ease,
+    opacity 240ms ease;
+}
+
+/* The title link covers the whole card; the other links and the results table sit above it. */
+.card-link::after {
+  position: absolute;
+  z-index: 0;
+  border-radius: inherit;
+  content: '';
+  inset: 0;
+}
+
+.card .thumb,
+.card .links a,
+.card .results {
+  position: relative;
+  z-index: 1;
+}
+
+.card-link:focus-visible {
+  outline: none;
+}
+
+.card-link:focus-visible::after {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.card:focus-within {
+  border-color: var(--ring);
+  background: var(--surface);
+  box-shadow: var(--lift-shadow);
+  transform: translateY(-4px);
+}
+
+@media (hover: hover) {
+  .card:hover {
+    border-color: var(--ring);
+    background: var(--surface);
+    box-shadow: var(--lift-shadow);
+    transform: translateY(-4px);
+  }
+
+  .projects:has(.card:hover) .card:not(:hover),
+  .pubs:has(.card:hover) .card:not(:hover) {
+    opacity: 0.55;
+  }
 }
 
 .project {
@@ -315,6 +385,11 @@ h3 {
   aspect-ratio: 3 / 2;
   object-fit: cover;
   filter: var(--plate-filter);
+  transition: transform 400ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.card:hover .thumb img {
+  transform: scale(1.05);
 }
 
 .project-head {
@@ -343,7 +418,7 @@ h3 {
   text-decoration: none;
 }
 
-.project-title a:hover {
+.card:hover .project-title a {
   color: var(--accent);
 }
 
@@ -498,6 +573,12 @@ h3 {
 .links svg {
   width: 15px;
   height: 15px;
+  transition: transform 200ms ease;
+}
+
+.card:hover .links svg,
+.links a:hover svg {
+  transform: translate(2px, -2px);
 }
 
 /* Publications, education, skills */
@@ -510,6 +591,10 @@ h3 {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.pubs {
+  gap: 4px;
 }
 
 .pub {
@@ -533,6 +618,16 @@ h3 {
 .pub-title {
   font-weight: 500;
   line-height: 1.45;
+}
+
+.pub-title a {
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.card:hover .pub-title a {
+  color: var(--accent);
 }
 
 .pub-authors,
@@ -631,9 +726,31 @@ h3 {
 
   .toc {
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
     margin-top: 28px;
     padding-top: 20px;
+  }
+
+  .toc a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 3px 0;
+  }
+
+  .toc a::before {
+    width: 16px;
+    height: 1px;
+    background: currentColor;
+    content: '';
+    opacity: 0.5;
+    transition: width 220ms ease, opacity 220ms ease;
+  }
+
+  .toc a:hover::before,
+  .toc a[aria-current]::before {
+    width: 40px;
+    opacity: 1;
   }
 
   .main-col {
@@ -653,6 +770,10 @@ h3 {
 
   .thumb {
     border-radius: 8px;
+  }
+
+  .card {
+    --card-pad: 12px;
   }
 
   .project-title {
@@ -694,12 +815,44 @@ h3 {
   }
 }
 
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .profile-inner,
+  .main-col > * {
+    animation: rise 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .main-col > :nth-child(1) {
+    animation-delay: 80ms;
+  }
+
+  .main-col > :nth-child(n + 2) {
+    animation-delay: 160ms;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
-  a {
+  a,
+  .card,
+  .thumb img,
+  .links svg,
+  .toc a::before {
     transition: none;
+  }
+
+  .card:hover,
+  .card:focus-within,
+  .card:hover .thumb img {
+    transform: none;
   }
 }

@@ -1,4 +1,5 @@
 import { ArrowUpRight } from 'lucide-react'
+import { SectionNav } from './section-nav'
 
 const email = 'zechuanlu7@gmail.com'
 const githubUrl = 'https://github.com/Kaiden118'
@@ -25,6 +26,9 @@ const sections = [
   { id: 'education', label: 'Education' },
   { id: 'skills', label: 'Skills' },
 ]
+
+// The intro is observed too, so no section is marked while it is on screen.
+const observedSections = ['about', ...sections.map((section) => section.id)]
 
 type Link = { label: string; href: string }
 
@@ -179,14 +183,14 @@ function Authors({ names }: { names: string[] }) {
 
 function ProjectEntry({ project }: { project: Project }) {
   return (
-    <article className="project" aria-labelledby={`${project.id}-title`}>
+    <article className="project card" aria-labelledby={`${project.id}-title`}>
       <a className="thumb" href={project.image.full} target="_blank" rel="noreferrer" aria-label={`Open the ${project.title} figure at full size`}>
         <img src={project.image.thumbnail} width={720} height={480} alt={project.image.alt} loading="lazy" decoding="async" />
       </a>
 
       <header className="project-head">
         <h3 id={`${project.id}-title`} className="project-title">
-          <ExternalLink href={project.href}>{project.title}</ExternalLink>
+          <a className="card-link" href={project.href} target="_blank" rel="noreferrer">{project.title}</a>
         </h3>
         <p className="project-subtitle">{project.subtitle}</p>
         <p className="meta">
@@ -290,17 +294,13 @@ export default function Page() {
               ))}
             </dl>
 
-            <nav className="toc" aria-label="Sections">
-              {sections.map((section) => (
-                <a key={section.id} href={`#${section.id}`}>{section.label}</a>
-              ))}
-            </nav>
+            <SectionNav sections={sections} observe={observedSections} />
           </div>
         </div>
       </aside>
 
       <main id="main" className="main-col">
-        <section className="intro" aria-label="About">
+        <section id="about" className="intro" aria-label="About">
           <p>
             I’m a first-year M.S. student in Computer Science at USC. I build machine learning systems for medical
             imaging, and tools that check whether ML code really does what it claims.
@@ -324,10 +324,12 @@ export default function Page() {
           <h2 id="publications-heading" className="section-title">Publications</h2>
           <ol className="pubs">
             {publications.map((publication) => (
-              <li key={publication.title} className="pub">
+              <li key={publication.title} className="pub card">
                 <span className="pub-year">{publication.year}</span>
                 <div>
-                  <p className="pub-title">{publication.title}</p>
+                  <p className="pub-title">
+                    <a className="card-link" href={publication.links[0].href} target="_blank" rel="noreferrer">{publication.title}</a>
+                  </p>
                   <p className="pub-authors"><Authors names={publication.authors} /></p>
                   <p className="pub-venue">{publication.venue}</p>
                   <p className="links pub-links">
