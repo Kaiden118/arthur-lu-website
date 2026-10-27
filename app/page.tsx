@@ -264,14 +264,9 @@ export default function Page() {
       <main id="main" className="main-col">
         <section id="about" className="intro" aria-label="About">
           <p>
-            I want to build machine learning systems that people can rely on. I like working on both the models and
-            the software around them, from data pipelines and training code to the checks that show a system really
-            works.
-          </p>
-          <p>
-            I’m most interested in medical imaging and other healthcare applications, generative models, and LLM
-            agents. Reliability is what ties them together for me: in healthcare a quiet mistake has a real cost, and
-            as agents take on more engineering work, we need ways to tell when their changes are right.
+            I’m Arthur, a first-year M.S. student in Computer Science at USC. I’m interested in medical imaging,
+            generative models and LLM agents, and I like building both the models and the software that makes them
+            reliable. I want to work as a machine learning engineer, AI engineer or software engineer.
           </p>
         </section>
 
