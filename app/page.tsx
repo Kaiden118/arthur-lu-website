@@ -264,9 +264,19 @@ export default function Page() {
       <main id="main" className="main-col">
         <section id="about" className="intro" aria-label="About">
           <p>
-            I’m Arthur, a first-year M.S. student in Computer Science at USC. I’m interested in medical imaging,
-            generative models and LLM agents, and I like building both the models and the software that makes them
-            reliable. I want to work as a machine learning engineer, AI engineer or software engineer.
+            I’m Arthur Lu, a first-year M.S. student in Computer Science at USC in Los Angeles. Before USC, I studied
+            Computer Science with Artificial Intelligence at the University of Nottingham Ningbo China.
+          </p>
+          <p>
+            I’m interested in machine learning for medical imaging, generative models and LLM agents, and in the
+            engineering that makes them dependable. I like working along the whole path from raw data to a working
+            system: preparing datasets, training models, and building the tools and tests that show whether a model
+            learned what it should. My current work asks a practical question. When a training run finishes, or an AI
+            agent says it has fixed a bug, how do we know the result is right?
+          </p>
+          <p>
+            I want to work as a machine learning engineer, AI engineer or software engineer, and I’m looking for a
+            Summer 2027 internship in one of these roles.
           </p>
         </section>
 
