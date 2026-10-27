@@ -284,14 +284,55 @@ h3 {
 }
 
 .project {
+  display: grid;
+  grid-template-columns: 216px minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    'thumb head'
+    'thumb body';
+  gap: 16px 28px;
+}
+
+.thumb {
+  display: block;
+  overflow: hidden;
+  grid-area: thumb;
+  align-self: start;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--plate);
+  transition: border-color 150ms ease;
+}
+
+.thumb:hover {
+  border-color: var(--accent);
+}
+
+.thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  filter: var(--plate-filter);
+}
+
+.project-head {
+  grid-area: head;
+  min-width: 0;
+}
+
+.project-body {
   display: flex;
+  min-width: 0;
+  grid-area: body;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 
 .project-title {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.375rem;
   font-weight: 600;
   letter-spacing: -0.015em;
   line-height: 1.2;
@@ -341,17 +382,19 @@ h3 {
 
 .results table {
   width: 100%;
-  min-width: 520px;
   border-collapse: collapse;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-variant-numeric: tabular-nums;
 }
 
 .results th,
 .results td {
-  padding: 10px 14px;
+  padding: 9px 12px;
   border-bottom: 1px solid var(--rule);
   text-align: right;
+}
+
+.results td {
   white-space: nowrap;
 }
 
@@ -412,36 +455,6 @@ h3 {
   font-family: var(--type-mono);
   font-size: 0.8125rem;
   font-variant-numeric: tabular-nums;
-}
-
-.plate {
-  margin: 0;
-}
-
-.plate-frame {
-  overflow: hidden;
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-  background: var(--plate);
-}
-
-.plate-frame a {
-  display: block;
-}
-
-.plate img {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  filter: var(--plate-filter);
-}
-
-.plate figcaption {
-  margin-top: 8px;
-  color: var(--faint);
-  font-size: 0.8125rem;
-  line-height: 1.5;
 }
 
 .project-foot {
@@ -629,29 +642,30 @@ h3 {
 }
 
 @media (max-width: 640px) {
-  /* Keep the diagram legible on phones: it scrolls sideways inside its frame. */
-  .plate-frame.is-wide {
-    overflow-x: auto;
+  /* On phones the thumbnail sits beside the title and the text runs full width below. */
+  .project {
+    grid-template-columns: 112px minmax(0, 1fr);
+    grid-template-areas:
+      'thumb head'
+      'body body';
+    gap: 16px;
   }
 
-  .plate-frame.is-wide img {
-    width: 640px;
-    max-width: none;
+  .thumb {
+    border-radius: 8px;
   }
 
-  .results table {
-    min-width: 0;
-    font-size: 0.8125rem;
+  .project-title {
+    font-size: 1.25rem;
+  }
+
+  .project-subtitle {
+    font-size: 0.9375rem;
   }
 
   .results th,
   .results td {
     padding: 9px 10px;
-  }
-
-  .results thead th,
-  .results tbody th {
-    white-space: normal;
   }
 }
 

@@ -8,8 +8,8 @@ const cmcdRepository = 'https://github.com/Kaiden118/Cross-Modality-Conditional-
 const motionCaptureRepository = 'https://github.com/Kaiden118/MotionCaptureSystem'
 const berberinePaper = 'https://doi.org/10.1016/j.ijbiomac.2024.133370'
 
-// Add a square photo to public/ and set its path here, e.g. '/profile.jpg'.
-const photo: string | null = null
+// The GitHub avatar; replace public/avatar.jpg to change it, or set null to show the AL monogram.
+const photo: string | null = '/avatar.jpg'
 
 const contacts = [
   { label: 'Email', value: email, href: `mailto:${email}` },
@@ -42,7 +42,8 @@ type Project = {
     note: string
   }
   facts?: string[]
-  figure: { src: string; width: number; height: number; alt: string; caption: string; wide?: boolean }
+  // A 3:2 thumbnail shown beside the project, linking to the full figure.
+  image: { thumbnail: string; full: string; alt: string }
   tags: string[]
   links: Link[]
 }
@@ -67,13 +68,10 @@ const projects: Project[] = [
       note:
         'Held-out test split: 180 repairs written by five LLM agents for six faults in pathology (Camelyon17-WILDS) and dermoscopy (HAM10000) pipelines. Preliminary until the blind review of the labels is complete.',
     },
-    figure: {
-      src: '/work/runsleuth-overview.svg',
-      width: 1000,
-      height: 272,
-      alt: 'Diagram: an LLM agent repairs a faulty project, a harness runs it, and RunSleuth v2 judges each requirement from run records and probe runs before accepting, sending to review or rejecting.',
-      caption: 'Hidden behavioural tests label every candidate. No verifier sees them.',
-      wide: true,
+    image: {
+      thumbnail: '/work/runsleuth-thumb.svg',
+      full: '/work/runsleuth-overview.svg',
+      alt: 'RunSleuth v2 judges each requirement, runs probes chosen by the evidence gap, and accepts, sends to review or rejects the repair.',
     },
     tags: ['Python', 'PyTorch', 'LLM agents', 'Medical imaging'],
     links: [{ label: 'Code', href: runsleuthRepository }],
@@ -88,12 +86,10 @@ const projects: Project[] = [
     summary:
       'A PyTorch diffusion model that translates in both directions. Anatomy-consistent structural guidance keeps the anatomy in place while denoising, cross-attention and classifier-free guidance condition on the source scan, and training combines MSE, L1 and SSIM losses.',
     facts: ['27.47 dB PSNR, T1 → T2 on BraTS 2020', '+1.74 dB over the best of six baselines', '20K+ slices at 256 × 256'],
-    figure: {
-      src: '/work/cmcd-translation.jpg',
-      width: 1600,
-      height: 373,
-      alt: 'Brain MRI slices: input, ground truth, CMCD and six baselines (Pix2Pix, UNet, CycleGAN, RED-CNN, Uformer, SynDiff) for T1 to T2 and T2 to T1.',
-      caption: 'One slice in each direction: input, ground truth, CMCD, then six baselines.',
+    image: {
+      thumbnail: '/work/cmcd-thumb.jpg',
+      full: '/work/cmcd-translation.jpg',
+      alt: 'Brain MRI slices: input, ground truth and CMCD output for T1 to T2 (top) and T2 to T1 (bottom).',
     },
     tags: ['PyTorch', 'Diffusion models', 'MRI'],
     links: [{ label: 'Code', href: cmcdRepository }],
@@ -108,12 +104,10 @@ const projects: Project[] = [
     summary:
       'Extends OnePose++, an offline single-camera pose pipeline, to live tracking from two cameras whose views are fused into one estimate. A Flask and Socket.IO backend with a Vue.js interface stores each object’s reference data, so a registered object can be tracked again without recapturing and preprocessing video.',
     facts: ['6-DoF tracking at 60 FPS', '3 objects across changing scenes'],
-    figure: {
-      src: '/work/mocap-dual-camera.jpg',
-      width: 878,
-      height: 258,
-      alt: 'Tracking interface showing camera A and camera B, each with 3D bounding boxes drawn around two objects on a desk.',
-      caption: 'Camera A and camera B in the tracking interface, with the estimated 3D boxes.',
+    image: {
+      thumbnail: '/work/tracking-thumb.jpg',
+      full: '/work/mocap-dual-camera.jpg',
+      alt: 'Camera A and camera B views with estimated 3D bounding boxes around two objects on a desk.',
     },
     tags: ['Python', 'Computer vision', 'Flask', 'Vue.js'],
     links: [{ label: 'Code', href: motionCaptureRepository }],
@@ -186,7 +180,11 @@ function Authors({ names }: { names: string[] }) {
 function ProjectEntry({ project }: { project: Project }) {
   return (
     <article className="project" aria-labelledby={`${project.id}-title`}>
-      <header>
+      <a className="thumb" href={project.image.full} target="_blank" rel="noreferrer" aria-label={`Open the ${project.title} figure at full size`}>
+        <img src={project.image.thumbnail} width={720} height={480} alt={project.image.alt} loading="lazy" decoding="async" />
+      </a>
+
+      <header className="project-head">
         <h3 id={`${project.id}-title`} className="project-title">
           <ExternalLink href={project.href}>{project.title}</ExternalLink>
         </h3>
@@ -196,63 +194,56 @@ function ProjectEntry({ project }: { project: Project }) {
         </p>
       </header>
 
-      <p className="project-summary">{project.summary}</p>
+      <div className="project-body">
+        <p className="project-summary">{project.summary}</p>
 
-      {project.results && (
-        <div className="results">
-          <div className="results-scroll">
-            <table aria-describedby={`${project.id}-results-note`}>
-              <thead>
-                <tr>
-                  {project.results.columns.map((column) => (
-                    <th key={column} scope="col">{column}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {project.results.rows.map((row) => (
-                  <tr key={row.name} className={row.highlight ? 'is-ours' : undefined}>
-                    <th scope="row">{row.name}</th>
-                    {row.values.map((value, index) => (
-                      <td key={project.results!.columns[index + 1]}>{value}</td>
+        {project.results && (
+          <div className="results">
+            <div className="results-scroll">
+              <table aria-describedby={`${project.id}-results-note`}>
+                <thead>
+                  <tr>
+                    {project.results.columns.map((column) => (
+                      <th key={column} scope="col">{column}</th>
                     ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {project.results.rows.map((row) => (
+                    <tr key={row.name} className={row.highlight ? 'is-ours' : undefined}>
+                      <th scope="row">{row.name}</th>
+                      {row.values.map((value, index) => (
+                        <td key={project.results!.columns[index + 1]}>{value}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p id={`${project.id}-results-note`} className="results-note">{project.results.note}</p>
           </div>
-          <p id={`${project.id}-results-note`} className="results-note">{project.results.note}</p>
-        </div>
-      )}
+        )}
 
-      {project.facts && (
-        <ul className="facts" aria-label={`${project.title} results`}>
-          {project.facts.map((fact) => <li key={fact}>{fact}</li>)}
-        </ul>
-      )}
+        {project.facts && (
+          <ul className="facts" aria-label={`${project.title} results`}>
+            {project.facts.map((fact) => <li key={fact}>{fact}</li>)}
+          </ul>
+        )}
 
-      <figure className="plate">
-        <div className={project.figure.wide ? 'plate-frame is-wide' : 'plate-frame'}>
-          <a href={project.figure.src} target="_blank" rel="noreferrer" aria-label={`Open the ${project.title} figure at full size`}>
-            <img src={project.figure.src} width={project.figure.width} height={project.figure.height} alt={project.figure.alt} loading="lazy" decoding="async" />
-          </a>
-        </div>
-        <figcaption>{project.figure.caption}</figcaption>
-      </figure>
-
-      <footer className="project-foot">
-        <ul className="tags" aria-label={`${project.title} technologies`}>
-          {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
-        </ul>
-        <div className="links">
-          {project.links.map((link) => (
-            <ExternalLink key={link.href} href={link.href}>
-              {link.label}
-              <ArrowUpRight aria-hidden="true" />
-            </ExternalLink>
-          ))}
-        </div>
-      </footer>
+        <footer className="project-foot">
+          <ul className="tags" aria-label={`${project.title} technologies`}>
+            {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
+          </ul>
+          <div className="links">
+            {project.links.map((link) => (
+              <ExternalLink key={link.href} href={link.href}>
+                {link.label}
+                <ArrowUpRight aria-hidden="true" />
+              </ExternalLink>
+            ))}
+          </div>
+        </footer>
+      </div>
     </article>
   )
 }
@@ -266,7 +257,7 @@ export default function Page() {
         <div className="profile-inner">
           <div className="profile-id">
             {photo ? (
-              <img className="portrait" src={photo} width={88} height={88} alt="Arthur Lu" />
+              <img className="portrait" src={photo} width={88} height={88} alt="Arthur Lu’s avatar" />
             ) : (
               <div className="monogram" aria-hidden="true">AL</div>
             )}
