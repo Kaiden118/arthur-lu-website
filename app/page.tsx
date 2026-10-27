@@ -35,7 +35,7 @@ type Project = {
   subtitle: string
   href: string
   period: string
-  context: string
+  context?: string
   summary: string
   facts?: string[]
   // Context for the facts, shown under them.
@@ -53,7 +53,6 @@ const projects: Project[] = [
     subtitle: 'Verifying the repairs LLM agents make to deep-learning training code',
     href: runsleuthRepository,
     period: 'Sep 2026 – present',
-    context: 'Independent research',
     summary:
       'Training bugs are often silent: the run finishes and accuracy barely moves. When an LLM agent says it fixed one, RunSleuth checks each requirement of the task against evidence recorded while the repaired project trains, runs short probes where that evidence is missing, and then accepts the repair, rejects it or sends it to a person.',
     facts: ['0 / 16 wrong repairs accepted', '0 / 164 correct repairs rejected', 'Best LLM reviewer: 2 / 16 wrong accepted'],
@@ -73,7 +72,7 @@ const projects: Project[] = [
     subtitle: 'Conditional diffusion for translating brain MRI between T1 and T2 contrast',
     href: cmcdRepository,
     period: 'Jun 2025 – May 2026',
-    context: 'Undergraduate thesis · ICONIP 2026',
+    context: 'ICONIP 2026',
     summary:
       'A PyTorch diffusion model that translates in both directions. Anatomy-consistent structural guidance keeps the anatomy in place while denoising, cross-attention and classifier-free guidance condition on the source scan, and training combines MSE, L1 and SSIM losses.',
     facts: ['27.47 dB PSNR, T1 → T2 on BraTS 2020', '+1.74 dB over the best of six baselines', '20K+ slices at 256 × 256'],
@@ -128,7 +127,7 @@ const publications = [
 const education = [
   {
     school: 'University of Southern California',
-    period: 'Aug 2026 – May 2028',
+    period: 'Aug 2026 – present',
     details: ['M.S. in Computer Science, expected May 2028. Los Angeles.'],
   },
   {
@@ -181,7 +180,8 @@ function ProjectEntry({ project }: { project: Project }) {
         </h3>
         <p className="project-subtitle">{project.subtitle}</p>
         <p className="meta">
-          {project.period} · {project.context}
+          {project.period}
+          {project.context && ` · ${project.context}`}
         </p>
       </header>
 
