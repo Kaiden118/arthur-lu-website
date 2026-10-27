@@ -1,212 +1,348 @@
-'use client'
+import { ArrowUpRight } from 'lucide-react'
+import { SectionNav } from './section-nav'
 
-import { useEffect, useState } from 'react'
-import { ArrowUpRight, CodeXml, FolderGit2, Mail, Menu, X } from 'lucide-react'
-
+const email = 'zechuanlu7@gmail.com'
+const githubUrl = 'https://github.com/Kaiden118'
+const linkedinUrl = 'https://www.linkedin.com/in/zechuan-lu-6923a1371'
+const runsleuthRepository = 'https://github.com/Kaiden118/RunSleuth-Evidence-Grounded-ML-Training-Failure-Diagnosis-and-Repair-Verification'
 const cmcdRepository = 'https://github.com/Kaiden118/Cross-Modality-Conditional-Diffusion-Model'
+const motionCaptureRepository = 'https://github.com/Kaiden118/MotionCaptureSystem'
 const berberinePaper = 'https://doi.org/10.1016/j.ijbiomac.2024.133370'
 
-const navigation = [
-  { number: '01.', label: 'About', href: '#about' },
-  { number: '02.', label: 'Publications', href: '#publications' },
-  { number: '03.', label: 'Projects', href: '#projects' },
-  { number: '04.', label: 'Skills', href: '#skills' },
-  { number: '05.', label: 'Contact', href: '#contact' },
+// The GitHub avatar; replace public/avatar.jpg to change it, or set null to show the AL monogram.
+const photo: string | null = '/avatar.jpg'
+
+const contacts = [
+  { label: 'Email', value: email, href: `mailto:${email}` },
+  { label: 'GitHub', value: 'Kaiden118', href: githubUrl },
+  { label: 'LinkedIn', value: 'zechuan-lu', href: linkedinUrl },
+  { label: 'Resume', value: 'PDF, one page', href: '/resume.pdf' },
+  { label: 'Based in', value: 'Los Angeles, CA' },
 ]
 
-const projects = [
+const sections = [
+  { id: 'work', label: 'Selected work' },
+  { id: 'publications', label: 'Publications' },
+  { id: 'education', label: 'Education' },
+  { id: 'skills', label: 'Skills' },
+]
+
+type Link = { label: string; href: string }
+
+type Project = {
+  id: string
+  title: string
+  subtitle: string
+  href: string
+  period: string
+  context?: string
+  summary: string
+  facts?: string[]
+  // Context for the facts, shown under them.
+  factsNote?: string
+  // A 3:2 thumbnail shown beside the project, linking to the full figure.
+  image: { thumbnail: string; full: string; alt: string }
+  tags: string[]
+  links: Link[]
+}
+
+const projects: Project[] = [
   {
+    id: 'runsleuth',
     title: 'RunSleuth',
-    repositoryUrl: 'https://github.com/kaiden118/runsleuth-evidence-grounded-ml-training-failure-diagnosis-and-repair-verification',
-    date: 'Sep 2026 – Present',
-    description: 'Evidence-grounded ML failure diagnosis & repair verification — a tool-calling LLM agent that diagnoses PyTorch training failures including silent faults and verifies proposed repairs against evidence.',
-    tags: ['PyTorch', 'LLM agent', 'training failures'],
+    subtitle: 'Verifying the repairs LLM agents make to deep-learning training code',
+    href: runsleuthRepository,
+    period: 'Sep 2026 – present',
+    summary:
+      'Training bugs are often silent: the run finishes and accuracy barely moves. When an LLM agent says it fixed one, RunSleuth checks each requirement of the task against evidence recorded while the repaired project trains, runs short probes where that evidence is missing, and then accepts the repair, rejects it or sends it to a person.',
+    facts: ['0 / 16 wrong repairs accepted', '0 / 164 correct repairs rejected', 'Best LLM reviewer: 2 / 16 wrong accepted'],
+    factsNote:
+      'Held-out test of 180 repairs written by five LLM agents for six faults in pathology and dermoscopy pipelines. Preliminary until the blind review of the labels is complete.',
+    image: {
+      thumbnail: '/work/runsleuth-thumb.svg',
+      full: '/work/runsleuth-overview.svg',
+      alt: 'RunSleuth v2 judges each requirement, runs probes chosen by the evidence gap, and accepts, sends to review or rejects the repair.',
+    },
+    tags: ['Python', 'PyTorch', 'LLM agents', 'Medical imaging'],
+    links: [{ label: 'Code', href: runsleuthRepository }],
   },
   {
+    id: 'cmcd',
     title: 'CMCD',
-    repositoryUrl: cmcdRepository,
-    date: 'Jun 2025 – May 2026',
-    description: 'Conditional diffusion model for T1/T2 MRI modality translation (ICONIP 2026).',
-    tags: ['diffusion models', 'MRI', 'medical imaging'],
+    subtitle: 'Conditional diffusion for translating brain MRI between T1 and T2 contrast',
+    href: cmcdRepository,
+    period: 'Jun 2025 – May 2026',
+    context: 'ICONIP 2026',
+    summary:
+      'A PyTorch diffusion model that translates in both directions. Anatomy-consistent structural guidance keeps the anatomy in place while denoising, cross-attention and classifier-free guidance condition on the source scan, and training combines MSE, L1 and SSIM losses.',
+    facts: ['27.47 dB PSNR, T1 → T2 on BraTS 2020', '+1.74 dB over the best of six baselines', '20K+ slices at 256 × 256'],
+    image: {
+      thumbnail: '/work/cmcd-thumb.jpg',
+      full: '/work/cmcd-translation.jpg',
+      alt: 'Brain MRI slices: input, ground truth and CMCD output for T1 to T2 (top) and T2 to T1 (bottom).',
+    },
+    tags: ['PyTorch', 'Diffusion models', 'MRI'],
+    links: [{ label: 'Code', href: cmcdRepository }],
   },
   {
-    title: 'MotionCaptureSystem',
-    repositoryUrl: 'https://github.com/kaiden118/motioncapturesystem',
-    date: 'Oct 2024 – Apr 2025',
-    description: 'Multi-camera 6-DoF object tracking with calibrated camera geometry and real-time pose estimation.',
-    tags: ['multi-camera', '6-DoF', 'pose estimation'],
+    id: 'tracking',
+    title: 'Dual-camera object tracking',
+    subtitle: 'Real-time 6-DoF object pose from two camera views',
+    href: motionCaptureRepository,
+    period: 'Oct 2024 – Apr 2025',
+    context: 'Motion capture system',
+    summary:
+      'Extends OnePose++, an offline single-camera pose pipeline, to live tracking from two cameras whose views are fused into one estimate. A Flask and Socket.IO backend with a Vue.js interface stores each object’s reference data, so a registered object can be tracked again without recapturing and preprocessing video.',
+    facts: ['6-DoF tracking at 60 FPS', '3 objects across changing scenes'],
+    image: {
+      thumbnail: '/work/tracking-thumb.jpg',
+      full: '/work/mocap-dual-camera.jpg',
+      alt: 'Camera A and camera B views with estimated 3D bounding boxes around two objects on a desk.',
+    },
+    tags: ['Python', 'Computer vision', 'Flask', 'Vue.js'],
+    links: [{ label: 'Code', href: motionCaptureRepository }],
   },
 ]
 
-const languages = ['Python', 'C++', 'JavaScript', 'Java', 'C#', 'SQL'] as const
+const self = 'Lu, Z.'
 
-const skillGroups = [
-  { label: 'Languages', items: languages },
-  { label: 'ML/GenAI', items: ['PyTorch', 'OpenCV', 'LLM agents', 'diffusion models', 'Transformers', 'Hugging Face', 'OpenAI API'] },
-  { label: 'Frameworks', items: ['Flask', 'FastAPI', 'Vue.js', 'Socket.IO'] },
+const publications = [
+  {
+    year: '2026',
+    title: 'CMCD: Conditional Diffusion Model for Medical Image Modality Translation',
+    authors: ['Lu, Z.', 'Huang, M.', 'He, X.'],
+    venue: 'International Conference on Neural Information Processing (ICONIP), 2026. Accepted.',
+    links: [{ label: 'Code', href: cmcdRepository }],
+  },
+  {
+    year: '2024',
+    title:
+      'Interactions of Three Berberine Mid-Chain Fatty Acid Salts with Bovine Serum Albumin (BSA): Spectroscopic Analysis and Molecular Docking',
+    authors: ['Fan, S.', 'Lu, Z.', 'Yan, Z.', 'Hu, L.'],
+    venue: 'International Journal of Biological Macromolecules, 274, 133370, 2024.',
+    links: [{ label: 'DOI', href: berberinePaper }],
+  },
 ]
 
-function SectionHeading({ number, children }: { number: string; children: React.ReactNode }) {
+const education = [
+  {
+    school: 'University of Southern California',
+    period: 'Aug 2026 – present',
+    details: ['M.S. in Computer Science, expected May 2028. Los Angeles.'],
+  },
+  {
+    school: 'University of Nottingham Ningbo China',
+    period: 'Sep 2022 – Jul 2026',
+    details: [
+      'B.S. (Hons) in Computer Science with Artificial Intelligence, Second-Class Honours (Division One). Ningbo.',
+      'Thesis: Cross-Modality Conditional Diffusion for T1 & T2 MRI Translation.',
+    ],
+  },
+]
+
+const skills = [
+  { label: 'Languages', items: ['Python', 'C++', 'JavaScript', 'Java', 'C#', 'SQL'] },
+  { label: 'ML & GenAI', items: ['PyTorch', 'OpenCV', 'Hugging Face Transformers', 'Diffusion models', 'LLM agents', 'OpenAI API'] },
+  { label: 'Engineering', items: ['Flask', 'FastAPI', 'Vue.js', 'Socket.IO', 'Git', 'Docker', 'Linux'] },
+]
+
+function ExternalLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <h2 className="section-heading">
-      <span className="section-number">{number}</span>
-      <span>{children}</span>
-      <span className="section-rule" aria-hidden="true" />
-    </h2>
+    <a href={href} target="_blank" rel="noreferrer">
+      {children}
+    </a>
+  )
+}
+
+function Authors({ names }: { names: string[] }) {
+  return (
+    <>
+      {names.map((name, index) => (
+        <span key={name}>
+          {index > 0 && (index === names.length - 1 ? ', & ' : ', ')}
+          {name === self ? <strong>{name}</strong> : name}
+        </span>
+      ))}
+    </>
+  )
+}
+
+function ProjectEntry({ project }: { project: Project }) {
+  return (
+    <article className="project card" aria-labelledby={`${project.id}-title`}>
+      <a className="thumb" href={project.image.full} target="_blank" rel="noreferrer" aria-label={`Open the ${project.title} figure at full size`}>
+        <img src={project.image.thumbnail} width={720} height={480} alt={project.image.alt} loading="lazy" decoding="async" />
+      </a>
+
+      <header className="project-head">
+        <h3 id={`${project.id}-title`} className="project-title">
+          <a className="card-link" href={project.href} target="_blank" rel="noreferrer">{project.title}</a>
+        </h3>
+        <p className="project-subtitle">{project.subtitle}</p>
+        <p className="meta">
+          {project.period}
+          {project.context && ` · ${project.context}`}
+        </p>
+      </header>
+
+      <div className="project-body">
+        <p className="project-summary">{project.summary}</p>
+
+        {project.facts && (
+          <ul className="facts" aria-label={`${project.title} results`}>
+            {project.facts.map((fact) => <li key={fact}>{fact}</li>)}
+          </ul>
+        )}
+
+        {project.factsNote && <p className="facts-note">{project.factsNote}</p>}
+
+        <footer className="project-foot">
+          <ul className="tags" aria-label={`${project.title} technologies`}>
+            {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
+          </ul>
+          <div className="links">
+            {project.links.map((link) => (
+              <ExternalLink key={link.href} href={link.href}>
+                {link.label}
+                <ArrowUpRight aria-hidden="true" />
+              </ExternalLink>
+            ))}
+          </div>
+        </footer>
+      </div>
+    </article>
   )
 }
 
 export default function Page() {
-  const [menuOpen, setMenuOpen] = useState(false)
-
-  useEffect(() => {
-    const revealElements = document.querySelectorAll<HTMLElement>('[data-reveal]')
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible')
-            observer.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.12 },
-    )
-
-    revealElements.forEach((element) => observer.observe(element))
-    return () => observer.disconnect()
-  }, [])
-
-  const closeMenu = () => setMenuOpen(false)
-
   return (
-    <>
+    <div className="page">
       <a className="skip-link" href="#main">Skip to content</a>
-      <header className="site-header">
-        <a className="brand-mark" href="#top" aria-label="Arthur Lu home">AL<span>.</span></a>
-        <div className="header-actions">
-          <a className="resume-link" href="/resume.pdf" target="_blank" rel="noreferrer">Resume</a>
-          <button
-            className="menu-toggle"
-            type="button"
-            aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-            aria-expanded={menuOpen}
-            aria-controls="site-navigation"
-            onClick={() => setMenuOpen((open) => !open)}
-          >
-            {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
-          </button>
+
+      <aside className="profile" aria-label="Profile">
+        <div className="profile-inner">
+          <div className="profile-id">
+            {photo ? (
+              <img className="portrait" src={photo} width={136} height={136} alt="Arthur Lu’s avatar" />
+            ) : (
+              <div className="monogram" aria-hidden="true">AL</div>
+            )}
+            <h1 className="name">Arthur Lu</h1>
+            <p className="alias">Publishes as Zechuan Lu</p>
+            <p className="role">M.S. Computer Science student at the University of Southern California</p>
+            <p className="status">
+              <span className="status-dot" aria-hidden="true" />
+              <span>Open to Summer 2027 internships in ML, AI and software engineering</span>
+            </p>
+          </div>
+
+          <div className="profile-links">
+            <dl className="contact">
+              {contacts.map((contact) => (
+                <div key={contact.label}>
+                  <dt>{contact.label}</dt>
+                  <dd>
+                    {contact.href ? (
+                      contact.href.startsWith('mailto:') ? (
+                        <a href={contact.href}>{contact.value}</a>
+                      ) : (
+                        <ExternalLink href={contact.href}>{contact.value}</ExternalLink>
+                      )
+                    ) : (
+                      contact.value
+                    )}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+
+            <SectionNav sections={sections} />
+          </div>
         </div>
-        <nav id="site-navigation" className={`site-nav${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation" aria-hidden={!menuOpen}>
-          {navigation.map((item) => (
-            <a key={item.href} href={item.href} onClick={closeMenu} tabIndex={menuOpen ? 0 : -1}>
-              <span>{item.number}</span> {item.label}
-            </a>
-          ))}
-        </nav>
-      </header>
+      </aside>
 
-      <main id="main" className="portfolio-shell">
-        <section id="top" className="hero" aria-labelledby="hero-title">
-          <p className="eyebrow">Hi, my name is</p>
-          <h1 id="hero-title">Arthur Lu<span>.</span></h1>
-          <p className="hero-subtitle">M.S. Computer Science @ USC.</p>
-          <p className="hero-copy">My interests are in machine learning for medical imaging, LLM agents, and building reliable ML systems — from diffusion models for MRI modality translation to diagnosing silent training faults and verifying automated repairs.</p>
-          <a className="outline-button" href="mailto:zechuanl@usc.edu">Get In Touch</a>
-          <div className="hero-contact" aria-label="Contact and profiles">
-            <a href="mailto:zechuanl@usc.edu"><Mail aria-hidden="true" /> zechuanl@usc.edu</a>
-            <a href="https://github.com/Kaiden118" target="_blank" rel="noreferrer"><CodeXml aria-hidden="true" /> GitHub</a>
-            <a href="https://linkedin.com/in/zechuan-lu-6923a1371" target="_blank" rel="noreferrer"><span className="linkedin-icon" aria-hidden="true">in</span> LinkedIn</a>
+      <main id="main" className="main-col">
+        <section id="about" className="intro" aria-label="About">
+          <p>
+            I’m Arthur Lu, a first-year M.S. student in Computer Science at USC in Los Angeles. Before USC, I studied
+            Computer Science with Artificial Intelligence at the University of Nottingham Ningbo China.
+          </p>
+          <p>
+            I’m interested in machine learning for medical imaging, generative models and LLM agents, and in the
+            engineering that makes them dependable. I like working along the whole path from raw data to a working
+            system: preparing datasets, training models, and building the tools and tests that show whether a model
+            learned what it should. My current work asks a practical question. When a training run finishes, or an AI
+            agent says it has fixed a bug, how do we know the result is right?
+          </p>
+          <p>
+            I want to work as a machine learning engineer, AI engineer or software engineer, and I’m looking for a
+            Summer 2027 internship in one of these roles.
+          </p>
+        </section>
+
+        <section id="work" aria-labelledby="work-heading">
+          <h2 id="work-heading" className="section-title">Selected work</h2>
+          <div className="projects">
+            {projects.map((project) => <ProjectEntry key={project.id} project={project} />)}
           </div>
         </section>
 
-        <section id="about" className="portfolio-section" data-reveal aria-labelledby="about-heading">
-          <SectionHeading number="01.">About</SectionHeading>
-          <div className="section-copy">
-            <p>I am a first-year M.S. student in Computer Science at the University of Southern California. My interests are in machine learning for medical imaging, LLM agents, and building reliable ML systems — from diffusion models for MRI modality translation to diagnosing silent training faults and verifying automated repairs. Previously I received a B.S. (Hons) in Computer Science with Artificial Intelligence from the University of Nottingham Ningbo China, where my undergraduate thesis developed a cross-modality conditional diffusion model for T1/T2 MRI translation. I am seeking a 2027 summer internship in ML/AI engineering or software development.</p>
-          </div>
-          <div className="education-block">
-            <h3>Education</h3>
-            <article className="education-entry">
-              <div className="education-heading"><strong>University of Southern California</strong><span>Aug 2026 – May 2028</span></div>
-              <p>Los Angeles — M.S. in Computer Science</p>
-            </article>
-            <article className="education-entry">
-              <div className="education-heading"><strong>University of Nottingham Ningbo China</strong><span>Sep 2022 – Jul 2026</span></div>
-              <p>Ningbo — B.S. (Hons) in Computer Science with Artificial Intelligence, Second-Class Honours (Division One)</p>
-              <p>Thesis: Cross-Modality Conditional Diffusion for T1 &amp; T2 MRI Translation.</p>
-            </article>
-          </div>
-        </section>
-
-        <section id="publications" className="portfolio-section" data-reveal aria-labelledby="publications-heading">
-          <SectionHeading number="02.">Publications</SectionHeading>
-          <ol className="publication-list">
-            <li className="publication-item">
-              <p className="publication-citation"><strong className="author-highlight">Lu, Z.</strong>, Huang, M., &amp; He, X. <a className="publication-title" href={cmcdRepository} target="_blank" rel="noreferrer">CMCD: Conditional Diffusion Model for Medical Image Modality Translation.</a> <em>International Conference on Neural Information Processing (ICONIP)</em>, 2026.</p>
-              <a className="publication-code" href={cmcdRepository} target="_blank" rel="noreferrer">[code]</a>
-            </li>
-            <li className="publication-item">
-              <p className="publication-citation">Fan, S., <strong className="author-highlight">Lu, Z.</strong>, Yan, Z., &amp; Hu, L. <a className="publication-title" href={berberinePaper} target="_blank" rel="noreferrer">Interactions of Three Berberine Mid-Chain Fatty Acid Salts with Bovine Serum Albumin (BSA): Spectroscopic Analysis and Molecular Docking.</a> <em>International Journal of Biological Macromolecules</em>, 274, 133370, 2024.</p>
-              <a className="publication-code" href={berberinePaper} target="_blank" rel="noreferrer">[paper]</a>
-            </li>
+        <section id="publications" aria-labelledby="publications-heading">
+          <h2 id="publications-heading" className="section-title">Publications</h2>
+          <ol className="pubs">
+            {publications.map((publication) => (
+              <li key={publication.title} className="pub card">
+                <span className="pub-year">{publication.year}</span>
+                <div>
+                  <p className="pub-title">
+                    <a className="card-link" href={publication.links[0].href} target="_blank" rel="noreferrer">{publication.title}</a>
+                  </p>
+                  <p className="pub-authors"><Authors names={publication.authors} /></p>
+                  <p className="pub-venue">{publication.venue}</p>
+                  <p className="links pub-links">
+                    {publication.links.map((link) => (
+                      <ExternalLink key={link.href} href={link.href}>
+                        {link.label}
+                        <ArrowUpRight aria-hidden="true" />
+                      </ExternalLink>
+                    ))}
+                  </p>
+                </div>
+              </li>
+            ))}
           </ol>
         </section>
 
-        <section id="projects" className="portfolio-section" data-reveal aria-labelledby="projects-heading">
-          <SectionHeading number="03.">Projects</SectionHeading>
-          <div className="project-grid">
-            {projects.map((project) => (
-              <article className="project-card" key={project.title}>
-                <div className="project-card-top">
-                  <FolderGit2 aria-hidden="true" />
-                  <a className="project-link" href={project.repositoryUrl} target="_blank" rel="noreferrer" aria-label={`View ${project.title} on GitHub`}>
-                    <CodeXml aria-hidden="true" />
-                    <ArrowUpRight aria-hidden="true" />
-                  </a>
-                </div>
-                <h3><a href={project.repositoryUrl} target="_blank" rel="noreferrer">{project.title}</a></h3>
-                <p className="project-date">{project.date}</p>
-                <p className="project-description">{project.description}</p>
-                <ul className="tag-list" aria-label={`${project.title} technologies`}>
-                  {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
-                </ul>
-              </article>
+        <section id="education" aria-labelledby="education-heading">
+          <h2 id="education-heading" className="section-title">Education</h2>
+          <ul className="edu">
+            {education.map((entry) => (
+              <li key={entry.school} className="edu-row">
+                <span className="edu-school">{entry.school}</span>
+                <span className="edu-period">{entry.period}</span>
+                {entry.details.map((detail) => <p key={detail} className="edu-detail">{detail}</p>)}
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
 
-        <section id="skills" className="portfolio-section" data-reveal aria-labelledby="skills-heading">
-          <SectionHeading number="04.">Skills</SectionHeading>
-          <div className="skills-grid">
-            {skillGroups.map((group) => (
-              <div className="skill-group" key={group.label} data-skill-group={group.label}>
-                <h3>{group.label}</h3>
-                <ul>{group.items.map((skill) => <li key={skill}>{skill}</li>)}</ul>
+        <section id="skills" aria-labelledby="skills-heading">
+          <h2 id="skills-heading" className="section-title">Skills</h2>
+          <dl className="skills">
+            {skills.map((group) => (
+              <div key={group.label}>
+                <dt>{group.label}</dt>
+                <dd>{group.items.join(', ')}</dd>
               </div>
             ))}
-          </div>
+          </dl>
         </section>
 
-        <section id="contact" className="contact-section" data-reveal aria-labelledby="contact-heading">
-          <p className="eyebrow">05. What&apos;s next?</p>
-          <h2 id="contact-heading">Get In Touch</h2>
-          <p>I am seeking a 2027 summer internship in ML/AI engineering or software development.</p>
-          <a className="outline-button" href="mailto:zechuanl@usc.edu">Say Hello</a>
-          <div className="contact-links">
-            <a href="mailto:zechuanl@usc.edu">zechuanl@usc.edu</a>
-            <a href="https://github.com/Kaiden118" target="_blank" rel="noreferrer">github.com/Kaiden118</a>
-            <a href="https://linkedin.com/in/zechuan-lu-6923a1371" target="_blank" rel="noreferrer">linkedin.com/in/zechuan-lu-6923a1371</a>
-          </div>
-        </section>
-
-        <footer className="site-footer">Last updated October 2026.</footer>
+        <footer className="site-foot">
+          <span>Last updated October 2026</span>
+          <a href={`mailto:${email}`}>{email}</a>
+        </footer>
       </main>
-
-      <aside className="side-contact side-contact-left" aria-label="GitHub profile">
-        <a href="https://github.com/Kaiden118" target="_blank" rel="noreferrer" aria-label="GitHub profile"><CodeXml aria-hidden="true" /></a>
-        <span aria-hidden="true" />
-      </aside>
-    </>
+    </div>
   )
 }
