@@ -1,6 +1,6 @@
 import { ArrowUpRight } from 'lucide-react'
 
-const email = 'zechuanl@usc.edu'
+const email = 'zechuanlu7@gmail.com'
 const githubUrl = 'https://github.com/Kaiden118'
 const linkedinUrl = 'https://www.linkedin.com/in/zechuan-lu-6923a1371'
 const runsleuthRepository = 'https://github.com/Kaiden118/RunSleuth-Evidence-Grounded-ML-Training-Failure-Diagnosis-and-Repair-Verification'
@@ -153,7 +153,7 @@ const education = [
 const skills = [
   { label: 'Languages', items: ['Python', 'C++', 'JavaScript', 'Java', 'C#', 'SQL'] },
   { label: 'ML & GenAI', items: ['PyTorch', 'OpenCV', 'Hugging Face Transformers', 'Diffusion models', 'LLM agents', 'OpenAI API'] },
-  { label: 'Engineering', items: ['Flask', 'FastAPI', 'Vue.js', 'Socket.IO', 'Git', 'Linux'] },
+  { label: 'Engineering', items: ['Flask', 'FastAPI', 'Vue.js', 'Socket.IO', 'Git', 'Docker', 'Linux'] },
 ]
 
 function ExternalLink({ href, children }: { href: string; children: React.ReactNode }) {
