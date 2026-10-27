@@ -264,14 +264,14 @@ export default function Page() {
       <main id="main" className="main-col">
         <section id="about" className="intro" aria-label="About">
           <p>
-            I’m a first-year M.S. student in Computer Science at USC. I build machine learning systems for medical
-            imaging, and tools that check whether ML code really does what it claims.
+            I want to build machine learning systems that people can rely on. I like working on both the models and
+            the software around them, from data pipelines and training code to the checks that show a system really
+            works.
           </p>
           <p>
-            My current project, <a href="#runsleuth-title">RunSleuth</a>, decides whether to trust the fixes LLM agents
-            make to deep-learning training code, using evidence from the training run itself. Before USC I studied
-            Computer Science with Artificial Intelligence at the University of Nottingham Ningbo China, where my thesis
-            on diffusion models for MRI translation became a first-author paper accepted at ICONIP 2026.
+            I’m most interested in medical imaging and other healthcare applications, generative models, and LLM
+            agents. Reliability is what ties them together for me: in healthcare a quiet mistake has a real cost, and
+            as agents take on more engineering work, we need ways to tell when their changes are right.
           </p>
         </section>
 
